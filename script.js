@@ -2,24 +2,22 @@
 // create function to load tasks from local storage
 
 
-
 document.addEventListener('DOMContentLoaded', ()=>{
 
     // loading tasks from local storage
-    const tasks = JSON.parse(localStorage.getItem('tasks')) || []
     
-     
+
     // select elements
     const addButton = document.getElementById('add-task-btn')
     const taskInput = document.getElementById('task-input')
     const taskLists = document.getElementById('task-list')
 
-    function addTask(){
+
+    loadTasks()
+    function addTask(taskText, save = true){
 
         taskText = taskInput.value.trim()
-        tasks.push(taskText)
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-        
+       
         if(!taskText){
             alert('Please Enter a task');
 
@@ -49,6 +47,17 @@ document.addEventListener('DOMContentLoaded', ()=>{
             // clear task input 
             taskInput.value = ''
         }
+
+        if (save) {
+            const storedTasks = JSON.parse(localStorage.getItem('tasks')|| []);
+            storedTasks.push(taskText);
+            localStorage.setItem('tasks', JSON.stringify(storedTasks));
+        }
+    }
+
+    function loadTasks() {
+        const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        Array.from(storedTasks).forEach(taskText => addTask(taskText, false));
     }
 
     addButton.addEventListener('click',(event) => {
